@@ -1,12 +1,10 @@
 import './App.css';
 import React from 'react';
 import { Admin, Resource } from 'react-admin';
-import jsonServerProvider from 'ra-data-json-server';
-import { UserList } from './components/users';
-import { PostList, PostEdit, PostCreate } from './components/posts';
-import { FirebaseAuthProvider } from 'react-admin-firebase';
-
-const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
+import { UserList, UserEdit } from './components/users';
+import { Dashboard } from './components/dashboard';
+import { ReflectionList, ReflectionEdit } from './components/reflections';
+import { FirebaseAuthProvider, FirebaseDataProvider } from 'react-admin-firebase';
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -15,16 +13,17 @@ const config = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
-const firebaseAuthProvider = FirebaseAuthProvider(config);
+const authProvider = FirebaseAuthProvider(config);
+const dataProvider = FirebaseDataProvider(config);
 
 export default function App() {
   return (
-    <Admin dataProvider={dataProvider} authProvider={firebaseAuthProvider}>
-      <Resource name="users" list={UserList} />
-      <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} />
+    <Admin dashboard={Dashboard} dataProvider={dataProvider} authProvider={authProvider}>
+      <Resource name="users" list={UserList} edit={UserEdit}/>
+      <Resource name="reflectionResponses" options={{ label: 'Reflections' }} list={ReflectionList} edit={ReflectionEdit}/>
     </Admin>
   );
-}
+};

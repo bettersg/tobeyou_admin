@@ -1,16 +1,51 @@
 import React from 'react';
-import { List, Datagrid, TextField, EmailField } from 'react-admin';
-// import CustomEmailField from './CustomEmailField';
+import {
+  List,
+  Edit,
+  Datagrid,
+  EditButton,
+  TextField,
+  NumberField,
+  EmailField,
+  TextInput,
+  NumberInput,
+  SimpleForm,
+  SearchInput,
+} from 'react-admin';
 
-export const UserList = props => (
-  <List {...props}>
-    <Datagrid rowClick="edit">
-      <TextField source="name" />
-      <EmailField source="email" />
-      <TextField source="address.street" label="Street Address" />
-      <TextField source="phone" sortable={false} />
-      <TextField source="website" />
-      <TextField source="company.name" label="Company Name" />
-    </Datagrid>
-  </List>
-);
+const userFilters = [
+  <SearchInput source="username" alwaysOn />
+];
+
+export function UserList(props) {
+  return (
+    <List {...props} filters={userFilters}>
+      <Datagrid rowClick="edit">
+        <TextField source="username" />
+        <EmailField source="email" />
+        <NumberField source="age" />
+        <TextField source="gender" />
+        <TextField source="housing" />
+        <TextField source="race" />
+        <TextField source="religion" />
+        <EditButton />
+      </Datagrid>
+    </List>
+  );
+};
+
+export function UserEdit(props) {
+  return (
+    <Edit {...props}>
+      <SimpleForm>
+        <TextInput source="username" />
+        <TextInput source="email" />
+        <NumberInput source="age" />
+        <TextInput source="gender" />
+        <TextInput source="housing" />
+        <TextInput source="race" />
+        <TextInput source="religion" />
+      </SimpleForm>
+    </Edit>
+  );
+};

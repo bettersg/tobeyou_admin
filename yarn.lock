@@ -9977,14 +9977,6 @@
     "query-string" "^5.1.1"
     "reselect" "~3.0.0"
 
-"ra-data-json-server@^3.17.1":
-  "integrity" "sha512-N3u8/sj3chH32d3HGOcL80+3PMQf6+OJbIWTDRzcWlJXQ7OR1ZhHrqasK6njS93WRg6dMSmAGnDuTzxj3BkRvA=="
-  "resolved" "https://registry.npmjs.org/ra-data-json-server/-/ra-data-json-server-3.17.1.tgz"
-  "version" "3.17.1"
-  dependencies:
-    "query-string" "^5.1.1"
-    "ra-core" "^3.17.1"
-
 "ra-i18n-polyglot@^3.17.1":
   "integrity" "sha512-MOBt0VG++QlmhhV1rojeUGXbtBdCYibUWCbdB+CjwqhFb3Zl5/th6VuhFjyK0l6jxALRBAQ7g3pYFlliGuKWdQ=="
   "resolved" "https://registry.npmjs.org/ra-i18n-polyglot/-/ra-i18n-polyglot-3.17.1.tgz"

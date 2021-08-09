@@ -9,6 +9,7 @@ import {
   TextField,
   DateField,
   TextInput,
+  BooleanInput,
   ReferenceInput,
   SelectInput,
   DateTimeInput,
@@ -23,11 +24,16 @@ const reflectionIdStoryMap = {
 
 export function ReflectionList(props) {
   const reflectionFilters = [
-    <SearchInput source="answer" alwaysOn />,
+    <SearchInput source='answer' alwaysOn />,
     <SelectInput
-      source="reflectionId"
+      source='reflectionId'
+      choices={Object.entries(reflectionIdStoryMap).map(([id, name]) => ({ id: +id, name }))}
       alwaysOn
-      choices={Object.entries(reflectionIdStoryMap).map(([id, name]) => ({ id, name }))}
+    />,
+    <BooleanInput
+      label='Non-empty response'
+      source='$answer|nonemptyresponse'
+      alwaysOn
     />
   ];
 
@@ -39,7 +45,7 @@ export function ReflectionList(props) {
 
   return (
     <List {...props}
-      filter={{ questionId: '3' }}  // Show only reflection responses, i.e. questionId == 3
+      filter={{ questionId: 3 }}  // Show only reflection responses, i.e. questionId == 3
       filters={reflectionFilters}>
       <Datagrid rowClick="edit">
         <ReferenceField source="userId" reference="users"><TextField source="username" /></ReferenceField>

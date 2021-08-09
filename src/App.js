@@ -4,7 +4,8 @@ import { Admin, Resource } from 'react-admin';
 import { UserList, UserEdit } from './components/users';
 import { Dashboard } from './components/dashboard';
 import { ReflectionList, ReflectionEdit } from './components/reflections';
-import { FirebaseAuthProvider, FirebaseDataProvider } from 'react-admin-firebase';
+import { FirebaseAuthProvider } from 'react-admin-firebase';
+import { dataProvider } from './firestoreProvider';
 
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -17,7 +18,6 @@ const config = {
 };
 
 const authProvider = FirebaseAuthProvider(config);
-const dataProvider = FirebaseDataProvider(config);
 
 export default function App() {
   return (

@@ -17,7 +17,7 @@ const userFilters = [
   <SearchInput source="username" alwaysOn />
 ];
 
-export function UserList(props) {
+export function UserList({permissions, ...props}) {
   return (
     <List {...props} filters={userFilters}>
       <Datagrid rowClick="edit">

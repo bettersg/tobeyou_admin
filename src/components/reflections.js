@@ -24,7 +24,7 @@ const reflectionIdStoryMap = {
 
 export function ReflectionList(props) {
   const reflectionFilters = [
-    <SearchInput source='answer' alwaysOn />,
+    <SearchInput source='$answer|search' alwaysOn />,
     <SelectInput
       source='reflectionId'
       choices={Object.entries(reflectionIdStoryMap).map(([id, name]) => ({ id: +id, name }))}

@@ -28,8 +28,8 @@ function isObject(x) {
  * @param {doc} DocumentSnapshot Firestore document snapshot
  * @returns {Object} the DocumentSnapshot.data() with an additionnal "Id" attribute
  */
-function parseFirestoreDocument(doc) {
-  const data = doc.data();
+function parseFirestoreDocument(docSnapshot) {
+  const data = docSnapshot.data();
   for (let key of Object.keys(data)) {
     const value = data[key];
     if (!isObject(value)) continue;
@@ -38,7 +38,7 @@ function parseFirestoreDocument(doc) {
       data[key] = value.toDate();
     }
   }
-  return { id: doc.id, ...data };
+  return { id: docSnapshot.id, ...data };
 }
 
 function sortData(data, field, order) {
@@ -75,6 +75,8 @@ export default async function dataProvider(type, resource, params) {
       if (op === 'nonemptyresponse' && value) {
         return doc[keyword].length > 5;
         // return !!doc[keyword];
+      } else if (op === 'search') {
+        return doc[keyword].toUpperCase().includes(value.toUpperCase());
       }
     }
     return true;
@@ -106,7 +108,7 @@ export default async function dataProvider(type, resource, params) {
       const query = db.collection(resource);
       const filteredQuery = applyFirestoreFilter(firestoreFilter, query);
       const querySnapshot = await filteredQuery.get();
-      const allData = querySnapshot.docs.map(doc => parseFirestoreDocument(doc));
+      const allData = querySnapshot.docs.map(docSnapshot => parseFirestoreDocument(docSnapshot));
       const filteredData = allData.filter(doc => applyDataFilter(dataFilter, doc));
 
       // If we want a cache, do it here. Cache by:
@@ -141,69 +143,49 @@ export default async function dataProvider(type, resource, params) {
     case UPDATE: {
       const { id, data } = params;
       await db.collection(resource).doc(id).set(data);
+      // TODO: what if the update fails?
       return { data };
     }
 
     case UPDATE_MANY: {
       // TODO: test
-      return {};
-      // return params.ids.map(id =>
-      //   db.collection(resource)
-      //     .doc(id)
-      //     .set(params.data)
-      //     .then(() => id)
-      // );
+      const { ids, data } = params;
+      await Promise.all(ids.map(id => db.collection(resource).doc(id).set(data)));
+      // TODO: what if any of the updates fail?
+      return { data: ids };
     }
 
     case DELETE: {
       // TODO: test
-      return {};
-      // return db.collection(resource)
-      //   .doc(params.id)
-      //   .delete()
-      //   .then(() => { return { data: params.previousData } });
+      const { id, previousData } = params;
+      await db.collection(resource).doc(id).delete();
+      // TODO: what if the deletion fails?
+      return { data: previousData };
     }
 
     case DELETE_MANY: {
       // TODO: test
-      return {};
-      // return {
-      //   data: params.ids.map(id =>
-      //     db.collection(resource)
-      //       .doc(id)
-      //       .delete()
-      //       .then(() => id)
-      //   )
-      // };
+      const { ids } = params;
+      await Promise.all(ids.map(id => db.collection(resource).doc(id).delete()));
+      // TODO: what if any of the deletions fail?
+      return { data: ids };
     }
 
     case GET_MANY: {
-      // TODO: revise this function (this was straight-up copied)
-      // Do not use FireStore Ref because react-admin will not be able to create or update
-      // Use a String field containing the ID instead
-      return Promise
-        .all(params.ids.map(id => db.collection(resource).doc(id).get()))
-        .then(arrayOfResults => {
-          return {
-            data: arrayOfResults.map(documentSnapshot => parseFirestoreDocument(documentSnapshot))
-          }
-        });
+      const { ids } = params;
+      const results = await Promise.all(ids.map(id => db.collection(resource).doc(id).get()));
+      const data = results.map(docSnapshot => parseFirestoreDocument(docSnapshot));
+      return { data };
     }
 
     case GET_MANY_REFERENCE: {
-      // TODO: revise this function (this was straight-up copied)
+      // TODO: implement and test
+      // This should be exactly like GET_LIST, but with extra { target, id } params to filter by where '==' on
       const { target, id } = params;
       const { field, order } = params.sort;
-      return db.collection(resource)
-        .where(target, "==", id)
-        .orderBy(field, order.toLowerCase())
-        .get()
-        .then(QuerySnapshot => {
-          return {
-            data: QuerySnapshot.docs.map(DocumentSnapshot => parseFirestoreDocument(DocumentSnapshot)),
-            total: QuerySnapshot.docs.length
-          }
-        });
+      const { filter } = params;
+      const { firestoreFilter, dataFilter } = splitFilters(filter);
+      return { data: [], total: 0 };
     }
 
     default: {

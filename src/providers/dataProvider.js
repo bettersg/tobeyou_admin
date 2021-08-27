@@ -105,21 +105,25 @@ export default async function dataProvider(type, resource, params) {
       const { filter } = params;
       const { firestoreFilter, dataFilter } = splitFilters(filter);
 
-      const query = db.collection(resource);
-      const filteredQuery = applyFirestoreFilter(firestoreFilter, query);
-      const querySnapshot = await filteredQuery.get();
-      const allData = querySnapshot.docs.map(docSnapshot => parseFirestoreDocument(docSnapshot));
-      const filteredData = allData.filter(doc => applyDataFilter(dataFilter, doc));
+      try {
+        const query = db.collection(resource);
+        const filteredQuery = applyFirestoreFilter(firestoreFilter, query);
+        const querySnapshot = await filteredQuery.get();
+        const allData = querySnapshot.docs.map(docSnapshot => parseFirestoreDocument(docSnapshot));
+        const filteredData = allData.filter(doc => applyDataFilter(dataFilter, doc));
 
-      // If we want a cache, do it here. Cache by:
-      // - 'resource'
-      // - 'filter' with its keys and values, if any
-      // do cache invalidation frequently + add refresh option
+        // If we want a cache, do it here. Cache by:
+        // - 'resource'
+        // - 'filter' with its keys and values, if any
+        // do cache invalidation frequently + add refresh option
 
-      sortData(filteredData, field, order);
-      const data = filteredData.slice((page - 1) * perPage, page * perPage);
-      const total = filteredData.length;
-      return { data, total }
+        sortData(filteredData, field, order);
+        const data = filteredData.slice((page - 1) * perPage, page * perPage);
+        const total = filteredData.length;
+        return { data, total };
+      } catch (err) {
+        throw new Error(`Error at GET_LIST: ${err}`);
+      }
     }
 
     case GET_ONE: {
@@ -128,54 +132,77 @@ export default async function dataProvider(type, resource, params) {
         if (!doc.exists) throw new Error('Document does not exist');
         return { data: parseFirestoreDocument(doc) };
       } catch (err) {
-        throw new Error({ message: err, status: 404 });
+        throw new Error(`Error at GET_ONE: ${err}`);
       }
     }
 
     case CREATE: {
       // TODO: test
       const { data } = params;
-      const docReference = await db.collection(resource).add(data);
-      const docSnapshot = await docReference.get();
-      return { data: parseFirestoreDocument(docSnapshot) };
+      try {
+        const docReference = await db.collection(resource).add(data);
+        const docSnapshot = await docReference.get();
+        return { data: parseFirestoreDocument(docSnapshot) };
+      } catch (err) {
+        throw new Error(`Error at CREATE: ${err}`);
+      }
     }
 
     case UPDATE: {
       const { id, data } = params;
-      await db.collection(resource).doc(id).set(data);
-      // TODO: what if the update fails?
-      return { data };
+      try {
+        if (resource === 'reflectionResponses' && data.answer === null) {
+          data.answer = '';  // default empty answer is '' instead of null
+        }
+        await db.collection(resource).doc(id).set(data);
+        return { data };
+      } catch (err) {
+        throw new Error(`Error at UPDATE: ${err}`);
+      }
     }
 
     case UPDATE_MANY: {
       // TODO: test
       const { ids, data } = params;
-      await Promise.all(ids.map(id => db.collection(resource).doc(id).set(data)));
-      // TODO: what if any of the updates fail?
-      return { data: ids };
+      try {
+        await Promise.all(ids.map(id => db.collection(resource).doc(id).set(data)));
+        return { data: ids };
+      } catch (err) {
+        throw new Error(`Error at UPDATE_MANY: ${err}`);
+      }
     }
 
     case DELETE: {
       // TODO: test
       const { id, previousData } = params;
-      await db.collection(resource).doc(id).delete();
-      // TODO: what if the deletion fails?
-      return { data: previousData };
+      try {
+        await db.collection(resource).doc(id).delete();
+        return { data: previousData };
+      } catch (err) {
+        throw new Error(`Error at DELETE: ${err}`);
+      }
     }
 
     case DELETE_MANY: {
       // TODO: test
       const { ids } = params;
-      await Promise.all(ids.map(id => db.collection(resource).doc(id).delete()));
-      // TODO: what if any of the deletions fail?
-      return { data: ids };
+      try {
+        await Promise.all(ids.map(id => db.collection(resource).doc(id).delete()));
+        return { data: ids };
+      } catch (err) {
+        throw new Error(`Error at DELETE_MANY: ${err}`);
+      }
     }
 
     case GET_MANY: {
       const { ids } = params;
-      const results = await Promise.all(ids.map(id => db.collection(resource).doc(id).get()));
-      const data = results.map(docSnapshot => parseFirestoreDocument(docSnapshot));
-      return { data };
+      try {
+        const results = await Promise.all(ids.map(id => db.collection(resource).doc(id).get()));
+        const data = results.map(docSnapshot => parseFirestoreDocument(docSnapshot));
+        return { data };
+      } catch (err) {
+        throw new Error(`Error at GET_MANY: ${err}`);
+      }
     }
 
     case GET_MANY_REFERENCE: {

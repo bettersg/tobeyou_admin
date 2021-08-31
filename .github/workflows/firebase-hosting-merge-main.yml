@@ -1,8 +1,8 @@
-name: PROD - Deploy to Firebase Hosting on merge to release
+name: PROD - Deploy to Firebase Hosting on merge to main
 'on':
   push:
     branches:
-      - release
+      - main
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest

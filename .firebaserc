@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "besomebody"
+  },
+  "targets": {
+    "besomebody": {
+      "hosting": {
+        "production": [
+          "tobeyou-admin"
+        ]
+      }
+    }
+  }
+}

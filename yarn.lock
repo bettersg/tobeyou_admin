@@ -1454,9 +1454,9 @@
   "version" "0.4.0"
 
 "@grpc/grpc-js@^1.0.0":
-  "integrity" "sha512-v7+LQFbqZKmd/Tvf5/j1Xlbq6jXL/4d+gUtm2TNX4QiEC3ELWADmGr2dGlUyLl6aKTuYfsN72vAsO5zmavYkEg=="
-  "resolved" "https://registry.npmjs.org/@grpc/grpc-js/-/grpc-js-1.3.6.tgz"
-  "version" "1.3.6"
+  "integrity" "sha512-CKQVuwuSPh40tgOkR7c0ZisxYRiN05PcKPW72mQL5y++qd7CwBRoaJZvU5xfXnCJDFBmS3qZGQ71Frx6Ofo2XA=="
+  "resolved" "https://registry.npmjs.org/@grpc/grpc-js/-/grpc-js-1.3.7.tgz"
+  "version" "1.3.7"
   dependencies:
     "@types/node" ">=12.12.47"
 
@@ -5732,7 +5732,7 @@
     "locate-path" "^5.0.0"
     "path-exists" "^4.0.0"
 
-"firebase@^7.9.x":
+"firebase@^7.24.0", "firebase@^7.9.x":
   "integrity" "sha512-j6jIyGFFBlwWAmrlUg9HyQ/x+YpsPkc/TTkbTyeLwwAJrpAmmEHNPT6O9xtAnMV4g7d3RqLL/u9//aZlbY4rQA=="
   "resolved" "https://registry.npmjs.org/firebase/-/firebase-7.24.0.tgz"
   "version" "7.24.0"

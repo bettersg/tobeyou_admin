@@ -208,10 +208,10 @@ export default async function dataProvider(type, resource, params) {
     case GET_MANY_REFERENCE: {
       // TODO: implement and test
       // This should be exactly like GET_LIST, but with extra { target, id } params to filter by where '==' on
-      const { target, id } = params;
-      const { field, order } = params.sort;
-      const { filter } = params;
-      const { firestoreFilter, dataFilter } = splitFilters(filter);
+      // const { target, id } = params;
+      // const { field, order } = params.sort;
+      // const { filter } = params;
+      // const { firestoreFilter, dataFilter } = splitFilters(filter);
       return { data: [], total: 0 };
     }
 

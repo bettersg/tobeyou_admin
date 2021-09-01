@@ -45,6 +45,7 @@ export function ReflectionList(props) {
 
   return (
     <List {...props}
+      bulkActionButtons={false}
       filter={{ questionId: 3 }}  // Show only reflection responses, i.e. questionId == 3
       filters={reflectionFilters}>
       <Datagrid rowClick="edit">

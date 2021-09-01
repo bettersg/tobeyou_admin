@@ -19,7 +19,9 @@ const userFilters = [
 
 export function UserList({permissions, ...props}) {
   return (
-    <List {...props} filters={userFilters}>
+    <List {...props}
+      bulkActionButtons={false}
+      filters={userFilters}>
       <Datagrid rowClick="edit">
         <TextField source="username" />
         <EmailField source="email" />

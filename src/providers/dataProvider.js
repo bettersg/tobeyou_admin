@@ -57,29 +57,37 @@ function sortData(data, field, order) {
 }
 
 export default async function dataProvider(type, resource, params) {
-  // Firestore filter: input format is { key: value }
+  // Firestore filter: input format is { key: value, ... }
   function applyFirestoreFilter(filter, query) {
     return Object.keys(filter).reduce((q, key) => {
       return q.where(key, '==', filter[key]);
     }, query);
   }
 
-  // Data filter: input format is { key|<op>: value }
-  // - <op> = nonemptyresponse
+  // Data filter: input format is { key|<op>: value, ... }
+  // <op> can be: nonemptyresponse, search
   function applyDataFilter(filter, doc) {
-    for (let key of Object.keys(filter)) {
-      const value = filter[key];
-      const split = key.split('|');
-      const keyword = split[0];
-      const op = split[1];
-      if (op === 'nonemptyresponse' && value) {
-        return doc[keyword].length > 5;
-        // return !!doc[keyword];
-      } else if (op === 'search') {
-        return doc[keyword].toUpperCase().includes(value.toUpperCase());
+    function dataFilter(op, field, value) {
+      switch (op) {
+      case 'nonemptyresonse':
+        return value && field.length > 5;
+      case 'search':
+        return field.toUpperCase().includes(value.toUpperCase());
+      default:
+        return true;
       }
     }
-    return true;
+
+    return Object.keys(filter)
+      .map(key => {
+        const value = filter[key];
+        const split = key.split('|');
+        const keyword = split[0];
+        const op = split[1];
+        const field = doc[keyword];
+        return dataFilter(op, field, value);
+      })
+      .reduce((acc, x) => acc && x, true);
   }
 
   // Firestore filters are as usual, data filters have a '$' in front

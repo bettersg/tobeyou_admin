@@ -69,8 +69,8 @@ export default async function dataProvider(type, resource, params) {
   function applyDataFilter(filter, doc) {
     function dataFilter(op, field, value) {
       switch (op) {
-      case 'nonemptyresonse':
-        return value && field.length > 5;
+      case 'nonemptyresponse':
+        return !value || (field && field.length > 5);
       case 'search':
         return field.toUpperCase().includes(value.toUpperCase());
       default:

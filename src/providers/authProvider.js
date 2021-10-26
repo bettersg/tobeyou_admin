@@ -1,7 +1,5 @@
-import { FirebaseAuthProvider } from 'react-admin-firebase';
 import config from '../config';
-
-const defaultAuthProvider = FirebaseAuthProvider(config);
+import { defaultAuthProvider } from '../firebase';
 
 const authProvider = {
   ...defaultAuthProvider,

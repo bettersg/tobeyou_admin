@@ -10,13 +10,7 @@ import {
   GET_MANY_REFERENCE,
 } from 'react-admin';
 
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
-import config from '../config';
-
-firebase.initializeApp(config);
-const db = firebase.firestore();
+import { db } from '../firebase';
 
 function isObject(x) {
   return !!x && typeof x == 'object';

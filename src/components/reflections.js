@@ -21,14 +21,19 @@ const reflectionIdStoryMap = {
   2: 'Nadia 1',
   3: 'Nadia 2',
   4: 'Nadia 3',
+  5: 'Aman 2',
 };
+
+const reflectionChoices = Object.entries(reflectionIdStoryMap)
+  .map(([id, name]) => ({ id: +id, name }))
+  .sort((x, y) => x.name > y.name);
 
 export function ReflectionList(props) {
   const reflectionFilters = [
     <SearchInput source='$answer|search' alwaysOn />,
     <SelectInput
       source='reflectionId'
-      choices={Object.entries(reflectionIdStoryMap).map(([id, name]) => ({ id: +id, name }))}
+      choices={reflectionChoices}
       alwaysOn
     />,
     <BooleanInput

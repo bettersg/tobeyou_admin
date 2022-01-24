@@ -39,6 +39,13 @@ function sortData(data, field, order) {
   data.sort((a, b) => {
     const x = order.toUpperCase() === 'ASC' ? a[field] : b[field];
     const y = order.toUpperCase() === 'ASC' ? b[field] : a[field];
+    if (x === undefined && y === undefined) {
+      return 0;
+    } else if (x === undefined) {
+      return -1;
+    } else if (y === undefined) {
+      return 1;
+    }
     const type = typeof x;
     switch (type) {
       case 'string':

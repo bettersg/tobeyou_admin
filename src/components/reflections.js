@@ -7,6 +7,7 @@ import {
   EditButton,
   ReferenceField,
   TextField,
+  NumberField,
   DateField,
   TextInput,
   BooleanInput,
@@ -60,6 +61,7 @@ export function ReflectionList(props) {
         <TextField source="answer" />
         {/* <NumberField source="questionId" /> */}
         <ReflectionField source="reflectionId" />
+        <NumberField source="numLikes" label="Likes" />
         <DateField source="submittedAt" showTime={true} />
         <EditButton />
       </Datagrid>

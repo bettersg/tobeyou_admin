@@ -24,6 +24,10 @@ const reflectionIdStoryMap = {
   4: 'Nadia 3',
   5: 'Aman 2',
   6: 'Aman 3',
+  7: 'Ravi 1',
+  8: 'Ravi 2',
+  9: 'Ravi 3',
+  10: 'Ravi 4',
 };
 
 const reflectionChoices = Object.entries(reflectionIdStoryMap)

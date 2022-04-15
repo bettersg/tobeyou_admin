@@ -17,6 +17,7 @@ import {
   SearchInput,
 } from 'react-admin';
 
+// For reference, see storyMap.js from the main repository
 const reflectionIdStoryMap = {
   1: 'Aman 1',
   2: 'Nadia 1',
@@ -28,6 +29,9 @@ const reflectionIdStoryMap = {
   8: 'Ravi 2',
   9: 'Ravi 3',
   10: 'Ravi 4',
+  11: 'Zhihao 1',
+  12: 'Zhihao 2',
+  13: 'Zhihao 3',
 };
 
 const reflectionChoices = Object.entries(reflectionIdStoryMap)

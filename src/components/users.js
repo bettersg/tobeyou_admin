@@ -6,9 +6,10 @@ import {
   EditButton,
   TextField,
   NumberField,
-  EmailField,
+  ReferenceField,
   TextInput,
   NumberInput,
+  ReferenceInput,
   SimpleForm,
   SearchInput,
 } from 'react-admin';
@@ -24,7 +25,9 @@ export function UserList({permissions, ...props}) {
       filters={userFilters}>
       <Datagrid rowClick="edit">
         <TextField source="username" />
-        <EmailField source="email" />
+        <ReferenceField reference="emails" source="id" label="email">
+          <TextField source="email" />
+        </ReferenceField>
         <NumberField source="age" />
         <TextField source="gender" />
         <TextField source="housing" />
@@ -41,7 +44,9 @@ export function UserEdit(props) {
     <Edit {...props}>
       <SimpleForm>
         <TextInput source="username" />
-        <TextInput source="email" />
+        <ReferenceInput reference="emails" source="email" disabled>
+          <TextInput />
+        </ReferenceInput>
         <NumberInput source="age" />
         <TextInput source="gender" />
         <TextInput source="housing" />

@@ -32,12 +32,12 @@ export function RoomList({permissions, ...props}) {
         <TextField source="name" />
         <TextField source="code" />
         <TextField source="organisation" />
-        <ReferenceArrayField reference="users" source="facilitatorIds">
+        <ReferenceArrayField reference="emails" source="facilitatorIds">
           <Datagrid>
             <TextField source="email" />
           </Datagrid>
         </ReferenceArrayField>
-        <ReferenceArrayField reference="users" source="participantIds">
+        <ReferenceArrayField reference="emails" source="participantIds">
           <Datagrid>
             <TextField source="email" />
           </Datagrid>
@@ -58,7 +58,7 @@ export function RoomEdit(props) {
         <TextInput source="name" />
         <TextInput source="code" />
         <TextInput source="organisation" />
-        <ReferenceArrayInput reference="users" source="facilitatorIds">
+        <ReferenceArrayInput reference="emails" source="facilitatorIds">
           <SelectArrayInput optionText="email" />
         </ReferenceArrayInput>
         <ReferenceArrayInput reference="users" source="participantIds">

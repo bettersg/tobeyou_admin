@@ -9,7 +9,6 @@ import {
   ReferenceField,
   TextInput,
   NumberInput,
-  ReferenceInput,
   SimpleForm,
   SearchInput,
 } from 'react-admin';
@@ -44,9 +43,6 @@ export function UserEdit(props) {
     <Edit {...props}>
       <SimpleForm>
         <TextInput source="username" />
-        <ReferenceInput reference="emails" source="email" disabled>
-          <TextInput />
-        </ReferenceInput>
         <NumberInput source="age" />
         <TextInput source="gender" />
         <TextInput source="housing" />
